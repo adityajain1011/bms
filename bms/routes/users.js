@@ -33,16 +33,25 @@ router.post('/login', function(req, res, next) {
 router.post('/register', (req, res) => {
   console.log(db);
   let userCollection = db.collection('users');
-  userCollection.insertOne({
-    userName: req.body.userName,
-    password: req.body.password,
-    contactNo: req.body.contactNo,
-    email: req.body.email
-  }, (err, resp) => {
-    if(err) {
+  var regex = new RegExp(["^", req.body.userName, "$"].join(""), "i");
+  userCOllection.find({userName: regex}).toArray((err, resp) => {
+    if (err) {
       res.send('err');
+    } else if(resp.length > 0) {
+      resp.send('User with same username already exists');
     } else {
-      res.send(resp);
+      userCollection.insertOne({
+        userName: req.body.userName,
+        password: req.body.password,
+        contactNo: req.body.contactNo,
+        email: req.body.email
+      }, (errInsert, resp) => {
+        if(errInsert) {
+          res.send('err');
+        } else {
+          res.send(resp);
+        }
+      })
     }
   })
 })

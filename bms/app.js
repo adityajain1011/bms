@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+import billsRouter from './routes/bills';
 import * as _ from 'lodash';
 
 var app = express();

@@ -25,7 +25,6 @@ router.post('/login', function(req, res, next) {
       } else {
         res.status(200).json({success: false, user: null})
       }
-      res.send(resp);
     }
   })
   // res.send('respond with a resource');
@@ -34,11 +33,11 @@ router.post('/register', (req, res) => {
   console.log(db);
   let userCollection = db.collection('users');
   var regex = new RegExp(["^", req.body.userName, "$"].join(""), "i");
-  userCOllection.find({userName: regex}).toArray((err, resp) => {
+  userCollection.find({userName: regex}).toArray((err, resp) => {
     if (err) {
       res.send('err');
     } else if(resp.length > 0) {
-      resp.send('User with same username already exists');
+      res.send('User with same username already exists');
     } else {
       userCollection.insertOne({
         userName: req.body.userName,

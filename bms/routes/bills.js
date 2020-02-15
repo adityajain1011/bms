@@ -87,11 +87,12 @@ router.post('/addBill', (req, res) => {
         promocodeDiscount: req.body.promocodeDiscount,
         paymentDetails: req.body.paymentDetails
     }
-  billCollection.insertOne(payload, (err, resp) =>{
+  billCollection.insertOne(payload, (err) =>{
     if (err) {
-      res.status(500).json({err});
+      res.status(500).json({success: false,
+        error: err});
     } else {
-      res.status(200).json({res: resp});
+      res.status(200).json({res: {success: true}});
     }
   })
 

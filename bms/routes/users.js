@@ -16,10 +16,8 @@ router.post('/login', function(req, res, next) {
   userCOllection.find({userName: regex,
     password: req.body.password}).toArray((err, resp) => {
     if (err) {
-      console.log(err);
       res.send(err);
     } else {
-      console.log(resp);
       if (resp.length > 0) {
         res.status(200).json({success: true, user: resp[0]})
       } else {
@@ -27,8 +25,9 @@ router.post('/login', function(req, res, next) {
       }
     }
   })
-  // res.send('respond with a resource');
 });
+
+
 router.post('/register', (req, res) => {
   console.log(db);
   let userCollection = db.collection('users');

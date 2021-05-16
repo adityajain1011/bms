@@ -13,8 +13,7 @@ router.post('/getbills', (req, res) => {
     let billCollection = db.collection('bills');
     billCollection.find({billerId: req.body.userName}).toArray((err, resp) => {
         if (err) {
-            console.log(err);
-            res.send(err);
+            res.status(500).json({error: "Database Error"});
           } else {
             console.log(resp);
             if (resp.length > 0) {
@@ -30,17 +29,15 @@ router.post('/getbillByBillId', (req, res) => {
     let billCollection = db.collection('bills');
     billCollection.findAll({billerId: req.userName, billId: req.params.billId}).toArray((er, resp) => {
         if (err) {
-            console.log(err);
-            res.send(err);
+          res.status(500).json({error: "Database Error"});
+        } else {
+          console.log(resp);
+          if (resp.length > 0) {
+            res.status(200).json({success: true, user: resp[0]})
           } else {
-            console.log(resp);
-            if (resp.length > 0) {
-              res.status(200).json({success: true, user: resp[0]})
-            } else {
-              res.status(200).json({success: false, user: null})
-            }
-            res.send(resp);
+            res.status(200).json({success: false, user: null})
           }
+        }
     })
 })
 // let payload = {
@@ -82,10 +79,10 @@ router.post('/addBill', (req, res) => {
       billerId: req.body.customerId,
       vendor: req.body.vendor,
       products: req.body.products,
-        totalBill: req.body.totalBill,
-        promocodeApplied: req.body.promocodeApplied,
-        promocodeDiscount: req.body.promocodeDiscount,
-        paymentDetails: req.body.paymentDetails
+      totalBill: req.body.totalBill,
+      promocodeApplied: req.body.promocodeApplied,
+      promocodeDiscount: req.body.promocodeDiscount,
+      paymentDetails: req.body.paymentDetails
     }
   billCollection.insertOne(payload, (err) =>{
     if (err) {

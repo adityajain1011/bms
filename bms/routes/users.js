@@ -54,4 +54,30 @@ router.post('/register', (req, res) => {
   })
 })
 
+router.post('/registerVendor', (req, res) => {
+  let userCollection = db.collection('vendors');
+  var regex = new RegExp(["^", req.body.vendorName, "$"].join(""), "i");
+  userCollection.find({vendorName: regex}).toArray((err, resp) => {
+    if (err) {
+      res.send('err');
+    } else if(resp.length > 0) {
+      res.send('User with same vendorName already exists');
+    } else {
+      userCollection.insertOne({
+        vendorName: req.body.vendorName,
+        password: req.body.password,
+        contactNo: req.body.contactNo,
+        email: req.body.email,
+        metaData: req.body.metaData
+      }, (errInsert, resp) => {
+        if(errInsert) {
+          res.status(500).json({err: "Database Error Occured"});
+        } else {
+          res.status(200).json({resp});
+        }
+      })
+    }
+  })
+})
+
 module.exports = router;
